@@ -9,33 +9,37 @@
 #include <map>
 #include <functional>
 #include "MA2_in_cpp.h"
+//#include <Eigen/Eigen/Dense> 
+//TODO: Expand MA2 with imaginary numbers
 
 using namespace std;
 
 
 map<string, function<double(double)>> functions_1 = {
        {"sin", static_cast<double(*)(double)>(&sin)},
-       { "cos", static_cast<double(*)(double)>(&cos) }
+       { "cos", static_cast<double(*)(double)>(&cos) },
+       { "exp", static_cast<double(*)(double)>(&exp) },
+        {"log", static_cast<double(*)(double)>(&log)},
+        {"abs", static_cast<double(*)(double)>(&abs)}
 };
 map<string, function<double(double)>> functions_n = {
        {"sin", static_cast<double(*)(double)>(&sin)},
        { "cos", static_cast<double(*)(double)>(&cos) }
-};
+}; //TODO: Implement functions_n
 
 
-
-double arglist(Tokenizer& tok, map < string, double > variables)
+double arglist(Tokenizer& tok, map < string, double >& variables)
 {
-    return 0;
+    return 0; //TODO: Implement arglist
 }
-double statement(Tokenizer& tok, map< string, double > variables)
+double statement(Tokenizer& tok, map< string, double >& variables)
 {
     if (tok.is_at_end()) { return 0; }
     double result = assignment(tok,variables);
     if (!tok.is_at_end()) { throw SyntaxError("Characters left in statement"); }
     return result;
 }
-double assignment(Tokenizer& tok, map < string, double > variables)
+double assignment(Tokenizer& tok, map< string, double >& variables)
 {
     double result = expression(tok, variables);
     while (tok.get_current() == "=") {
@@ -46,7 +50,7 @@ double assignment(Tokenizer& tok, map < string, double > variables)
     }
     return result;
 }
-double expression(Tokenizer& tok, map < string, double > variables) {
+double expression(Tokenizer& tok, map < string, double >& variables) {
     double result = term(tok, variables);
     string curr = tok.get_current();
     while (curr == "+" || curr == "-")
@@ -58,7 +62,7 @@ double expression(Tokenizer& tok, map < string, double > variables) {
     }
      return result;
 }
-double term(Tokenizer& tok, map < string, double > variables) {
+double term(Tokenizer& tok, map < string, double >& variables) {
     double result = factor(tok, variables);
     string curr = tok.get_current();
     while (curr == "*" || curr == "/") {
@@ -69,7 +73,7 @@ double term(Tokenizer& tok, map < string, double > variables) {
     }
     return result;
 }
-double factor(Tokenizer& tok, map < string, double > variables)
+double factor(Tokenizer& tok, map <string,double >& variables)
 {
     string curr = tok.get_current();
     double result{};
@@ -96,10 +100,11 @@ double factor(Tokenizer& tok, map < string, double > variables)
     }
     else if (functions_n.count(curr))
     {
-        
+    //TODO: Implement multifunctions in factor
     }
     else if (tok.is_name())
     {   
+        if (!variables.count(tok.get_current())) { throw SyntaxError("Undeclared Variable!"); }
         result = variables[tok.get_current()];
         tok.next();
     }

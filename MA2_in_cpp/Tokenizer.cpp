@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 // public
 Tokenizer::Tokenizer(std::string input)
 {

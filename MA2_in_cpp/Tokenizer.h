@@ -1,14 +1,17 @@
 #pragma once
 #include <string>
 #include <vector>
-	enum TokenType {
+//#include <Eigen/Eigen/Dense> 
+enum TokenType {
 	OP,
 	NAME,
 	NUMBER,
 	SEPERATOR,
 	EOL,
-	COMMENT,
-	ERRTOKEN
+	COMMENT, // WIP
+	ERRTOKEN,
+	COMPLEX, //TODO: Expand Tokenizer with imaginary numbers
+	MATRIX	// WIP
 
 	};
 	struct Token {
@@ -23,7 +26,7 @@
 		void tokenize(std::string input);
 		void handleToken(std::string::iterator& it, std::string& tempString, std::string& input, int& retFlag);
 		std::vector <Token> Tokens;
-		std::vector<char> Operators = { '+', '-', '*' , '/' };
+		std::vector<char> Operators = { '+', '-', '*' , '/', '=' };
 		std::vector<char> Separators = { '(', ')' };
 		int parenthesisInt;
 		void checkErrors();
